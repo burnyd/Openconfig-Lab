@@ -1,0 +1,10 @@
+*.vagrant
+*.vmdk
+*.vsd
+*.iso
+*.vsd
+*.pyc
+*.retry
+*.log
+*.logs
+/configs
