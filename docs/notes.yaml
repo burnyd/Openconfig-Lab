@@ -4,11 +4,6 @@ General:
   - Model based configuration.  Data ia structured
   - Replacement for SNMP
 
-Arista:
-  - Agent maps data from netdb <-> YANG models.
-  - CPU
-  - SMASH
-
 YANG:
   - RFC 6020
   - Model definition language
@@ -16,10 +11,12 @@ YANG:
   - Created early 2000's.
   - Best thing at the time for modeling language.
   - Operators already knew YANG structure.
+  - http://ops.openconfig.net/branches/models/ #Gives you the tree structure visualization tells you what the yang model is leaf, leaf-list, container etc.
   YANG: #From RFC 6020
-    container: a reference to child nodes container nodes do not have a value and holds a single argument
+    container: a reference to child nodes container nodes do not have a value and holds a single argument.  Fixed set of attributes.
     leaf nodes: contains data like a integer or a string it has a single value
     leaf-list nodes: sequence of leaf nodes holding a value each leaf
+    list: Collections of containers
 
 #Example of a YANG model
 module bleh {
@@ -43,17 +40,36 @@ module: blah
   list: #Collections has KV's you identify keys to the list.
     - baz is the key to the list above
 
+#This can be accessed within the path of /foo/bar/baz
+
 Transport: #Slide 4
   - NETCONF:
     - RFC 6241 #XML Over SSH
   - RESTCONF:
-    - RFC #Need to find
+    - RFC 8040 #Basic rest
   - GNMI / GRPC:
-    - RFC #?
+    - Proto Buffers + JSON over HTTP2
+
+Arista:
+  - Agent maps data from netdb <-> YANG models.
+  - Written in Go
+  - CPU
+  - SMASH
+  - Show how to do each transport configs
 
 Openconfig_changes: #Slide 5
-  - update
-  - get
-  - Merge
-  - Add
-  - Replace
+  - Merge - Merge subtree with another
+  - get - Takes in a path and returns data from the tree
+  - Replace - Replace a tree with another
+  - Delete - Deletes a subtree at path
+  - subscribe - If using GNMI streams the model
+  - update - Updates the tree
+
+yang to code:
+  - pyang
+  - goyang
+
+GRPC_Interfaces:
+  - GNMI
+  - GNOI
+  - GRIBI
