@@ -1,0 +1,59 @@
+General:
+  - Vendor neutral data models written in YANG #Define the modesl that communicate to a switch to configure things.
+  - Created from customers / Operators
+  - Model based configuration.  Data ia structured
+  - Replacement for SNMP
+
+Arista:
+  - Agent maps data from netdb <-> YANG models.
+  - CPU
+  - SMASH
+
+YANG:
+  - RFC 6020
+  - Model definition language
+  - Yet Another Generation.
+  - Created early 2000's.
+  - Best thing at the time for modeling language.
+  - Operators already knew YANG structure.
+  YANG: #From RFC 6020
+    container: a reference to child nodes container nodes do not have a value and holds a single argument
+    leaf nodes: contains data like a integer or a string it has a single value
+    leaf-list nodes: sequence of leaf nodes holding a value each leaf
+
+#Example of a YANG model
+module bleh {
+Container foo  {
+    list bar  {
+        key baz;
+        leaf baz{
+            type string;
+        }
+    }
+}
+}
+
+^^^^
+module: blah
+  +--rw foo
+      +-- bar* [baz]
+          type    string
+
+  - containers #entity
+  list: #Collections has KV's you identify keys to the list.
+    - baz is the key to the list above
+
+Transport: #Slide 4
+  - NETCONF:
+    - RFC 6241 #XML Over SSH
+  - RESTCONF:
+    - RFC #Need to find
+  - GNMI / GRPC:
+    - RFC #?
+
+Openconfig_changes: #Slide 5
+  - update
+  - get
+  - Merge
+  - Add
+  - Replace
