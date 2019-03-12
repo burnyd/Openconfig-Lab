@@ -10,14 +10,14 @@ import ocbind
 from pyangbind.lib.serialise import pybindJSONDecoder
 ph = xpathhelper.YANGPathHelper()
 
- 
+
 ocbgp = ocbind.openconfig_bgp(path_helper=ph)
 ocbgp.bgp.global_.config.as_ = 1
 ocbgp.bgp.global_.config.router_id = "1.1.1.1"
 struct =  json.dumps(ocbgp.get(filter=True), indent=4)
- 
+
 print struct
 
 with open('simple.json', 'w') as f:
   f.write(struct)
-
+I

@@ -6,6 +6,15 @@ no aaa root
 !
 username admin privilege 15 secret admin
 !
+interface Ethernet1
+   no switchport
+   ip address 12.12.12.1/24
+!
+interface Ethernet2
+!
+interface Loopback0
+   ip address 1.1.1.1/32
+!
 management api http-commands
    protocol http
    protocol unix-socket

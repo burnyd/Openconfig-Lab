@@ -1,10 +1,19 @@
-hostname ceos-1
+hostname ceos-2
 !
 spanning-tree mode mstp
 !
 no aaa root
 !
 username admin privilege 15 secret admin
+!
+interface Ethernet1
+   no switchport
+   ip address 12.12.12.2/24
+!
+interface Ethernet2
+!
+interface Loopback0
+   ip address 2.2.2.2/32
 !
 management api http-commands
    protocol http
