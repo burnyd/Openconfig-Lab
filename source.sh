@@ -3,7 +3,7 @@ wget https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz -P /opt/
 
 sleep 3
 
-sudo tar -C /usr/local -xzf /opt/go1.9.1.linux-amd64.tar.gz
+tar -C /usr/local -xzf /opt/go1.9.1.linux-amd64.tar.gz
 echo Adding Golang variables...
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$(go env GOPATH)/bin
