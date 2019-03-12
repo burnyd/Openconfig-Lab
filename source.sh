@@ -43,5 +43,14 @@ pyang --split-class-dir ocbind --plugindir $PYBINDPLUGIN \
     models/interfaces/openconfig-if-aggregate.yang \
     models/vlan/openconfig-vlan-types.yang \
     models/vlan/openconfig-vlan.yang \
-    models/interfaces/openconfig-if-ip.yang 
+    models/interfaces/openconfig-if-ip.yang \
+    models/bgp/openconfig-bgp.yang \
+    models/bgp/openconfig-bgp-policy.yang \
+    models/bgp/openconfig-bgp-common.yang \
+    models/bgp/openconfig-bgp-common-multiprotocol.yang \
+    models/bgp/openconfig-bgp-common-structure.yang \
+    models/bgp/openconfig-bgp-peer-group.yang \
+    models/bgp/openconfig-bgp-neighbor.yang \
+    models/bgp/openconfig-bgp-global.yang \
+    models/bgp/openconfig-bgp.yang 
 
