@@ -22,3 +22,26 @@ pip install pyangbind
 echo Adding pyangbind env
 export PYBINDPLUGIN=`/usr/bin/env python -c \
 	'import pyangbind; import os; print "%s/plugin" % os.path.dirname(pyangbind.__file__)'`
+
+git clone https://github.com/openconfig/public.git
+ln -s public/release/models models
+
+set -e
+
+pyang --split-class-dir ocbind --plugindir $PYBINDPLUGIN \
+    -p models \
+    -f pybind \
+    --use-xpathhelper \
+    models/interfaces/openconfig-interfaces.yang \
+    models/vlan/openconfig-vlan.yang \
+    models/openconfig-extensions.yang  \
+    models/types/openconfig-yang-types.yang \
+    models/types/openconfig-types.yang \
+    models/types/openconfig-inet-types.yang \
+    models/interfaces/openconfig-interfaces.yang \
+    models/interfaces/openconfig-if-ethernet.yang \
+    models/interfaces/openconfig-if-aggregate.yang \
+    models/vlan/openconfig-vlan-types.yang \
+    models/vlan/openconfig-vlan.yang \
+    models/interfaces/openconfig-if-ip.yang 
+
