@@ -3,6 +3,7 @@ General:
   - Created from customers / Operators
   - Model based configuration.  Data ia structured
   - Replacement for SNMP
+  - Need a unique model for all network devices.
 
 YANG:
   - RFC 6020
@@ -48,9 +49,15 @@ Transport: #Slide 4
   - RESTCONF:
     - RFC 8040 #Basic rest
   - GNMI / GRPC:
+    capabilities:
+      - CapabilityRequest
+      - GetRequest
+      - SetRequest
+      - SubscribeRequest
     - Proto Buffers + JSON over HTTP2
 
 Arista:
+  - Location of Openconfig modules  /usr/share/yang/modules/github.com/openconfig/public/release/models/
   - Agent maps data from netdb <-> YANG models.
   - Written in Go
   - CPU
@@ -70,6 +77,20 @@ yang to code:
   - goyang
 
 GRPC_Interfaces:
-  - GNMI
-  - GNOI
-  - GRIBI
+  - GNMI #Network management
+  - GNOI #Network operations interface
+  - GRIBI #Routing interface
+
+snmp_limitations: #Show a slide with 2.3.34.4.2.5.2.34.
+  - Polling method.
+  - Read write mibs
+  - single udp transport
+  - older than me.
+  - Poor performance for bulk data(UDP) ie acls millions, bgp routes millions
+  - mid design
+  - Difficult for replacement of cli completely or config completely or to manage the entire state
+
+syslog_limitations:
+  - UDP transport
+  - Non structured data
+  - Every vendor is different
