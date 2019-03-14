@@ -15,9 +15,9 @@ go get github.com/aristanetworks/goarista/cmd/gnmi
 
 echo Finished
 
-echo installing pyangbind
+echo installing pyangbind and napalm components
 
-pip install pyangbind
+pip install pyangbind napalm napalm-yang
 
 echo Adding pyangbind env
 export PYBINDPLUGIN=`/usr/bin/env python -c \
