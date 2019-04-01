@@ -1,0 +1,2 @@
+python gnmicli.py -n -m get -t ceos1 -x / -user admin -pass admin -p 6030
+python gNMI_Subscribe.py --server ceos1:6030 --username admin --password admin /interfaces
