@@ -56,7 +56,8 @@ import sys
 import os
 import logging
 import time
-
+from kafka import KafkaProducer
+producer = KafkaProducer(bootstrap_servers='localhost:9092')
 ##############################################################################
 
 def list_from_path(path='/'):
@@ -258,7 +259,8 @@ if __name__ == '__main__':
                 msgs += 1
                 upds += len(response.update.update)
                 if not options.stats:
-                    log.info('Update received\n'+str(response))
+                    #log.info('Update received\n'+str(response))
+                    producer.send('OC' , str(response))
             else:
                 log.error('Unknown response received:\n'+str(response))
 

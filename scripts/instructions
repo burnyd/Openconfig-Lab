@@ -1,2 +1,10 @@
 python gnmicli.py -n -m get -t ceos1 -x / -user admin -pass admin -p 6030
 python gNMI_Subscribe.py --server ceos1:6030 --username admin --password admin /interfaces
+
+
+from kafka import KafkaConsumer
+consumer = KafkaConsumer('sample','OC')
+for message in consumer:
+    print (message)
+
+docker run -dit --name=influxdb -p 8086:8086 -p 8088:8088 -p 8089:8089 --name=influx -v $PWD:/var/lib/influxdb  influxdb
