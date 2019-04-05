@@ -94,3 +94,35 @@ syslog_limitations:
   - UDP transport
   - Non structured data
   - Every vendor is different
+
+grpc:
+  - Removed the needs for restful services
+  - Sends over a rpc which is really like a method/function call
+  - When files are created there are 2 files .proto create the pb2.py and pb.
+  - Rest/versRPC:
+    - Rest:
+      - resource focus
+      - HTTP
+      - Only GET,POST,PUT and Delete
+      - Typically text only based
+      - Human readable
+    - GRPC:
+      - Action focus
+      - Emrbaces functions , methods just like a programming language
+      - Client needs to know about arguments methods and data once it gets it
+      - Leverage binary based messaged not text... so its quicker faster
+      - Not human readable because of proto buffs
+      - Idea is that everything goes to protobufs and supports multiple language
+  - GRPC:
+    - Idea is that a client application can call a method on a server like it were local to the device.
+    - Protobufs allow for serialization of all the data for any programming language to understand.
+    - JSON also works.
+    - IDL = Interface definition language(Python,Go etc)
+    - service = on the server slide
+    - stub = Client side application.
+    - Idea is for multi langauges and performance
+    - Also supports bidirectional streaming
+  - Kafka:
+    - Broker = single node
+    - Multiple brokers = Cluster
+    - Messages are written by Producers in Topics 

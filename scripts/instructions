@@ -7,4 +7,6 @@ consumer = KafkaConsumer('sample','OC')
 for message in consumer:
     print (message)
 
-docker run -dit --name=influxdb -p 8086:8086 -p 8088:8088 -p 8089:8089 --name=influx -v $PWD:/var/lib/influxdb  influxdb
+docker run -dit --net=kafka --name=influxdb -p 8086:8086 -p 8088:8088 -p 8089:8089 --name=influx -v $PWD:/var/lib/influxdb  influxdb
+docker run -dit --net=kafka --name=zookeeper -e ZOOKEEPER_CLIENT_PORT=2181 confluentinc/cp-zookeeper
+docker run -dit --net=kafka --name=kafka -p 9092:9092 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 confluentinc/cp-kafka
