@@ -1,47 +1,5 @@
 #!/usr/bin/python
 
-##############################################################################
-#                                                                            #
-#  gNMI_Subscribe.py                                                         #
-#                                                                            #
-#  History Change Log:                                                       #
-#                                                                            #
-#    1.0  [SW]  2017/06/02    first version                                  #
-#    1.1  [SW]  2017/07/06    timeout behavior improved                      #
-#    1.2  [SW]  2017/08/08    logging improved, options added                #
-#    1.3  [SW]  2017/12/04    support for gNMI v0.4                          #
-#                                                                            #
-#  Objective:                                                                #
-#                                                                            #
-#    Testing tool for the gNMI (GRPC Network Management Interface) in Python #
-#                                                                            #
-#  Features supported:                                                       #
-#                                                                            #
-#    - gNMI Subscribe (based on Nokia SROS 15.0 TLM feature-set)             #
-#    - secure and insecure mode                                              #
-#    - multiple subscriptions paths                                          #
-#                                                                            #
-#  Not yet supported:                                                        #
-#                                                                            #
-#    - Disable server name verification against TLS cert (opt: noHostCheck)  #
-#    - Disable cert validation against root certificate (InsecureSkipVerify) #
-#                                                                            #
-#  License:                                                                  #
-#                                                                            #
-#    Licensed under the MIT license                                          #
-#    See LICENSE.md delivered with this project for more information.        #
-#                                                                            #
-#  Author:                                                                   #
-#                                                                            #
-#    Sven Wisotzky                                                           #
-#    mail:  sven.wisotzky(at)nokia.com                                       #
-##############################################################################
-
-"""
-gNMI Subscribe Client in Python Version 1.3
-Copyright (C) 2017 Nokia. All Rights Reserved.
-"""
-
 __title__   = "gNMI_Subscribe"
 __version__ = "1.3"
 __status__  = "released"
@@ -57,8 +15,6 @@ import os
 import logging
 import time
 import json
-#from kafka import KafkaProducer
-#producer = KafkaProducer(bootstrap_servers='localhost:9092')
 ##############################################################################
 
 def list_from_path(path='/'):
