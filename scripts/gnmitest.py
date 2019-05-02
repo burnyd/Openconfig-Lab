@@ -1,3 +1,5 @@
+# Work from line 199
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -9,6 +11,7 @@ import re
 import ssl
 import sys
 import six
+import grpc
 try:
   import gnmi_pb2
 except ImportError:
@@ -30,10 +33,10 @@ _RE_PATH_COMPONENT = re.compile(r'''
 xpath = '/interfaces/interface[name=Ethernet1]/state/counters'
 user = 'daniel'
 password = 'daniel123'
-target = '10.20.30.24'
+target = '10.20.30.25'
 port = '6030'
-#mode = 'get'
-mode = 'subscribe'
+mode = 'get'
+#mode = 'subscribe'
 
 def _parse_path(p_names):
   """Parses a list of path names for path keys.
@@ -152,6 +155,40 @@ def _subscribe(stub, paths, username, password):
         mysblist = gnmi_pb2.SubscriptionList(prefix=None, mode=0, encoding=JSON_IETF, subscription=mysubs, qos=None)
         mysubreq = gnmi_pb2.SubscribeRequest( subscribe=mysblist )
 
+def path_from_string(path='/'):
+    mypath = []
+
+    for e in list_from_path(path):
+        eName = e.split("[", 1)[0]
+        eKeys = re.findall('\[(.*?)\]', e)
+        dKeys = dict(x.split('=', 1) for x in eKeys)
+        mypath.append(gnmi_pb2.PathElem(name=eName, key=dKeys))
+
+    return gnmi_pb2.Path(elem=mypath)
+
+
+
+def gen_request( xpath ):
+    mysubs = []
+    for path in xpath:
+        mypath = path_from_string(path)
+        mysub = gnmi_pb2.Subscription(path=mypath, mode='0', suppress_redundant=None, sample_interval=10*1000000000, heartbeat_interval=None)
+        mysubs.append(mysub)
+    #if opt.prefix:
+    #    myprefix = path_from_string(opt.prefix)
+    #else:
+    #    myprefix = None
+
+    #if opt.qos:
+    #    myqos = gnmi_pb2.QOSMarking(marking=opt.qos)
+    #else:
+    #    myqos = None
+    mysblist = gnmi_pb2.SubscriptionList(prefix=None, mode='0', allow_aggregation=None, encoding='0', subscription=mysubs, use_aliases=None, qos=None)
+    mysubreq = gnmi_pb2.SubscribeRequest( subscribe=mysblist )
+
+    #log.info('Sending SubscribeRequest\n'+str(mysubreq))
+    yield mysubreq
+
 def main():
   #metadata=[('username', username), ('password', password)]
   paths = _parse_path(_path_names(xpath)) #This is the actual path this uses for OC in JSON format.  This actually gets path lists from the created proto/python file.
@@ -162,31 +199,14 @@ def main():
                                  json_ietf_val), indent=2))
 
   elif mode == 'subscribe':
-    #responses = stub.Subscribe(req_iterator, options.timeout, metadata=metadata)
-    metadata=[('username', user), ('password', password)]
-    responses = stub.Subscribe(_subscribe, metadata=metadata)
-    for response in responses:
-        if response.HasField('sync_response'):
-            log.debug('Sync Response received\n'+str(response))
-            secs += time.time() - start
-            start = 0
-            if options.stats:
-                log.info("%d updates and %d messages within %1.2f seconds", upds, msgs, secs)
-                log.info("Statistics: %5.0f upd/sec, %5.0f msg/sec", upds/secs, msgs/secs)
-            elif response.HasField('error'):
-                log.error('gNMI Error '+str(response.error.code)+' received\n'+str(response.error.message))
-            elif response.HasField('update'):
-                if start==0:
-                    start=time.time()
-                msgs += 1
-                upds += len(response.update.update)
-                if not options.stats:
-                    log.info('Update received\n'+str(response))
-            else:
-                log.error('Unknown response received:\n'+str(response))
-
+      channel = grpc.insecure_channel(target)
+      stub = gnmi_pb2.gNMIStub(channel)
+      req_iterator = gen_request( xpath )
+      metadata=[('username', user), ('password', password)]
+      #responses = stub.Subscribe(req_iterator, None , metadata=metadata)
+      responses = stub.Subscribe(req_iterator, metadata=metadata)
+      print(responses)
 
 
 if __name__ == '__main__':
   main()
-

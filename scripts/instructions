@@ -1,13 +1,25 @@
 python gnmicli.py -n -m get -t ceos1 -x / -user admin -pass admin -p 6030
 python gNMI_Subscribe.py --server ceos1:6030 --username admin --password admin /interfaces
 
+#influx commands
+CREATE DATABASE OC
+use OC
+CREATE USER dan WITH PASSWORD 'dan' WITH ALL PRIVILEGES
+
+
 
 from kafka import KafkaConsumer
 consumer = KafkaConsumer('sample','OC')
 for message in consumer:
     print (message)
 
+from kafka import KafkaProducer
+producer = KafkaProducer(bootstrap_servers='localhost:9092')
+producer.send('OC', b'Hello, World!')
+producer.send('OC', key=b'message-two', value=b'This is Kafka-Python')
+
 docker run -dit --net=kafka --name=influxdb -p 8083:8083 -p 8086:8086 -p 8088:8088 -p 8089:8089 --name=influx -v $PWD:/var/lib/influxdb  influxdb
 docker run -dit --net=kafka --name=zookeeper -e ZOOKEEPER_CLIENT_PORT=2181 confluentinc/cp-zookeeper
 docker run -dit --net=kafka --name=kafka -p 9092:9092 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 confluentinc/cp-kafka
 docker run -dit --net=kafka --name=telegraf -v $PWD/scripts/telegraf.conf:/etc/telegraf/telegraf.conf telegraf
+docker run -dit --net=kafka --name=opentsdb -p 4242:4242 petergrace/opentsdb-docker
