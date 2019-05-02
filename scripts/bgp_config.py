@@ -14,7 +14,7 @@ eos_bgp = {'ceos1': {'AS': '65001', 'PEER_AS': '65002', 'ROUTER_ID': '1.1.1.1', 
 
 
 def main():
-for k,v in eos_bgp.iteritems():
+  for k,v in eos_bgp.iteritems():
     ocbgp = ocbind.openconfig_bgp(path_helper=ph)
     ocbgp.bgp.global_.config.as_ = v['AS']
     ocbgp.bgp.global_.config.router_id = v['ROUTER_ID']

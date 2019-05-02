@@ -1,5 +1,3 @@
-# Work from line 199
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -36,7 +34,6 @@ password = 'daniel123'
 target = '10.20.30.25'
 port = '6030'
 mode = 'get'
-#mode = 'subscribe'
 
 def _parse_path(p_names):
   """Parses a list of path names for path keys.
@@ -71,7 +68,9 @@ def _parse_path(p_names):
   return gnmi_pb2.Path(elem=gnmi_elems)
 
 def _path_names(xpath):
-  """Parses the xpath names.
+  """
+  All this really does is add the devices into a python list!
+  Parses the xpath names.
 
   This takes an input string and converts it to a list of gNMI Path names. Those
   are later turned into a gNMI Path Class object for use in the Get/SetRequests.
@@ -142,19 +141,6 @@ def _get(stub, paths, username, password):
         metadata=[('username', username), ('password', password)])
   return stub.Get(gnmi_pb2.GetRequest(path=[paths], encoding='JSON_IETF'))
 
-def _subscribe(stub, paths, username, password):
-    mysubs = []
-    for path in xpath:
-        mypath = path_from_string(path)
-        #mysub = gnmi_pb2.Subscription(path=mypath, mode=opt.mode, suppress_redundant=opt.suppress, sample_interval=opt.interval*1000000000, heartbeat_interval=opt.heartbeat)
-        mysub = gnmi_pb2.Subscription(path=mypath, mode='2', sample_interval=10*1000000000)
-        mysubs.append(mysub)
-
-    if username:
-        #mysblist = gnmi_pb2.SubscriptionList(prefix=myprefix, mode=opt.mode, allow_aggregation=opt.aggregate, encoding=opt.encoding, subscription=mysubs, use_aliases=opt.use_alias, qos=myqos)
-        mysblist = gnmi_pb2.SubscriptionList(prefix=None, mode=0, encoding=JSON_IETF, subscription=mysubs, qos=None)
-        mysubreq = gnmi_pb2.SubscribeRequest( subscribe=mysblist )
-
 def path_from_string(path='/'):
     mypath = []
 
@@ -166,47 +152,23 @@ def path_from_string(path='/'):
 
     return gnmi_pb2.Path(elem=mypath)
 
-
-
-def gen_request( xpath ):
-    mysubs = []
-    for path in xpath:
-        mypath = path_from_string(path)
-        mysub = gnmi_pb2.Subscription(path=mypath, mode='0', suppress_redundant=None, sample_interval=10*1000000000, heartbeat_interval=None)
-        mysubs.append(mysub)
-    #if opt.prefix:
-    #    myprefix = path_from_string(opt.prefix)
-    #else:
-    #    myprefix = None
-
-    #if opt.qos:
-    #    myqos = gnmi_pb2.QOSMarking(marking=opt.qos)
-    #else:
-    #    myqos = None
-    mysblist = gnmi_pb2.SubscriptionList(prefix=None, mode='0', allow_aggregation=None, encoding='0', subscription=mysubs, use_aliases=None, qos=None)
-    mysubreq = gnmi_pb2.SubscribeRequest( subscribe=mysblist )
-
-    #log.info('Sending SubscribeRequest\n'+str(mysubreq))
-    yield mysubreq
-
 def main():
   #metadata=[('username', username), ('password', password)]
-  paths = _parse_path(_path_names(xpath)) #This is the actual path this uses for OC in JSON format.  This actually gets path lists from the created proto/python file.
+  paths = _parse_path(_path_names(xpath))
+  #This prints out the entire elem path with the list broken up
   stub = _create_stub(target, port)
+  #This is easy to understand it simply creates the connection
   if mode == 'get':
     response = _get(stub, paths, user, password)
+    #This is where it actually talks with the device and begins to pull things back it looks like the following
+    """
+        val {
+      json_ietf_val: "{\"openconfig-interfaces:in-broadcast-pkts\": \"63498\", \"openconfig-interfaces:in-discards\": \"0\", \"openconfig-interfaces:in-errors\": \"0\", \"openconfig-interfaces:in-multicast-pkts\": \"3895875\", \"openconfig-interfaces:in-octets\": \"485946640\", \"openconfig-interfaces:in-unicast-pkts\": \"0\", \"openconfig-interfaces:out-broadcast-pkts\": \"39478\", \"openconfig-interfaces:out-discards\": \"0\", \"openconfig-interfaces:out-errors\": \"0\", \"openconfig-interfaces:out-multicast-pkts\": \"633859\", \"openconfig-interfaces:out-octets\": \"95779841\", \"openconfig-interfaces:out-unicast-pkts\": \"0\"}"
+    }
+  }
+}"""
     print(json.dumps(json.loads(response.notification[0].update[0].val.
                                  json_ietf_val), indent=2))
-
-  elif mode == 'subscribe':
-      channel = grpc.insecure_channel(target)
-      stub = gnmi_pb2.gNMIStub(channel)
-      req_iterator = gen_request( xpath )
-      metadata=[('username', user), ('password', password)]
-      #responses = stub.Subscribe(req_iterator, None , metadata=metadata)
-      responses = stub.Subscribe(req_iterator, metadata=metadata)
-      print(responses)
-
 
 if __name__ == '__main__':
   main()
