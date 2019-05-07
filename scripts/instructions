@@ -1,11 +1,16 @@
 python gnmicli.py -n -m get -t ceos1 -x / -user admin -pass admin -p 6030
 python gNMI_Subscribe.py --server ceos1:6030 --username admin --password admin /interfaces
+python test_client.py --host 10.20.30.25 --port 6030 --username daniel --password daniel123 --subscribe "interfaces/interface[name=Ethernet1]/state/counters"
+
+
+https://www.influxdata.com/blog/getting-started-python-influxdb/
+
 
 #influx commands
 CREATE DATABASE OC
 use OC
 CREATE USER dan WITH PASSWORD 'dan' WITH ALL PRIVILEGES
-
+GRANT ALL ON OC to dan
 
 
 from kafka import KafkaConsumer

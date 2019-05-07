@@ -17,30 +17,34 @@ import grpc.framework.interfaces.face
 import pyopenconfig.gnmi_pb2
 import pyopenconfig.resources
 
-import atexit
-from kafka import KafkaProducer
-import json
 import potsdb
+import atexit
 
-#producer = KafkaProducer(bootstrap_servers='localhost:9092')
-#producer = KafkaProducer(bootstrap_servers='kafka:9092',
-                                 #value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+from influxdb import InfluxDBClient
+import datetime
 
 # - logging configuration
 logging.basicConfig()
 logger = logging.getLogger('test-client')
-
 logger.setLevel(logging.DEBUG)
 
-host_ip = "localhost"
-host_port = 80050
+#host_ip = "localhost"
+#host_port = 80050
+
+influx = 'influx'
+client = InfluxDBClient(host=influx, port=8086, username='dan', password='dan', ssl=False, verify_ssl=False)
+client.switch_database('OC')
 
 mode = "stream"
 nums = 0
 
-db_host = 'opentsdb'
+"""db_host = '127.0.0.1'
 db_port = 4242
-#metrics = potsdb.Client(db_host, port=db_port)
+metrics = potsdb.Client(db_host, port=db_port)
+"""
+
+ts = time.time()
+st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%dT8:%H:%MZ')
 
 def encodePath(path):
     pathStrs = ""
@@ -52,30 +56,39 @@ def encodePath(path):
         pathStrs = pathStrs + "." + pstr
     return pathStrs[1:]
 
-#def saveToTSDB(response):
-    #print(response.update)
-#    for update in response.update.update:
-#        path_metric = encodePath(update.path.elem)
-#        tm = response.update.timestamp
-#        values = update.val.int_val
-        #metrics.send(path_metric, value, timestamp=tm)
-        #print(tm, path_metric, value)
-        #producer.send('OC' , str(tm, path_metric, value))
-        #producer.send('OC' , str(path_metric))
-        #logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
-        #producer.send('OC', key=path_metric, value=value)
-        #producer.send('OC', str(path_metric), str(value))
-        #producer.send('OC', {path_metric: value})
-        #producer.send('OC', key=str(path_metric), value=str(values).replace('"', ''))
-
-
-def saveToTSDB(response):
+"""def saveToTSDB(response):
     for update in response.update.update:
         path_metric = encodePath(update.path.elem)
         tm = response.update.timestamp
         value = update.val.int_val
-        metrics.send(path_metric, value, timestamp=tm)
-        logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
+        #metrics.send(path_metric, value, timestamp=tm)
+        #logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
+        #logger.debug("%s, value: %s" %(path_metric, value))
+        print(tm,path_metric,value)"""
+
+def saveToInflux(response):
+    for update in response.update.update:
+        path_metric = encodePath(update.path.elem)
+        value = update.val.int_val
+        time_now = str(datetime.datetime.now())
+        #metrics.send(path_metric, value, timestamp=tm)
+        #logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
+        #logger.debug("%s, value: %s" %(path_metric, value))
+        #print(tm,path_metric,value)
+        json_data = [
+        {
+        "measurement": "OC-Data",
+        "time": ""+time_now+"",
+        "fields": {
+            "' + path_metric +'": value
+        }
+    }
+]
+        #client.write_points(json_data)
+        client.write_points(json_data)
+        print("Inserted %s using value %s" %(path_metric, value))
+
+
 
 def get(stub, path_str, metadata):
     """Get and echo the response"""
@@ -91,10 +104,9 @@ def subscribe(stub, path_str, mode, metadata):
     i = 0
     try:
         for response in stub.Subscribe(subscribe_request, metadata=metadata):
-            #saveToTSDB(response)
             #logger.debug(response)
-            #print(response)
-            print(json.dumps(json.loads(response), indent=2))
+            #saveToTSDB(response)
+            saveToInflux(response)
             i += 1
             nums = i
     except grpc.framework.interfaces.face.face.AbortionError, error: # pylint: disable=catching-non-exception
@@ -155,6 +167,7 @@ def run():
         subscribe(stub, args.subscribe, args.mode, metadata)
     else:
         subscribe(stub, '/', metadata)
+
 
 if __name__ == '__main__':
     run()
