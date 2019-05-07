@@ -17,7 +17,7 @@ import grpc.framework.interfaces.face
 import pyopenconfig.gnmi_pb2
 import pyopenconfig.resources
 
-import potsdb
+#import potsdb
 import atexit
 
 from influxdb import InfluxDBClient
@@ -56,35 +56,25 @@ def encodePath(path):
         pathStrs = pathStrs + "." + pstr
     return pathStrs[1:]
 
-"""def saveToTSDB(response):
-    for update in response.update.update:
-        path_metric = encodePath(update.path.elem)
-        tm = response.update.timestamp
-        value = update.val.int_val
-        #metrics.send(path_metric, value, timestamp=tm)
-        #logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
-        #logger.debug("%s, value: %s" %(path_metric, value))
-        print(tm,path_metric,value)"""
 
 def saveToInflux(response):
     for update in response.update.update:
         path_metric = encodePath(update.path.elem)
         value = update.val.int_val
         time_now = str(datetime.datetime.now())
-        #metrics.send(path_metric, value, timestamp=tm)
-        #logger.debug("send to openTSDB: metric: %s, value: %s" %(path_metric, value))
-        #logger.debug("%s, value: %s" %(path_metric, value))
-        #print(tm,path_metric,value)
         json_data = [
         {
         "measurement": "OC-Data",
+        "tags": {
+            "host": "server",
+            "region": "NYC"
+        },
         "time": ""+time_now+"",
         "fields": {
-            "' + path_metric +'": value
+            "value": path_metric
         }
     }
 ]
-        #client.write_points(json_data)
         client.write_points(json_data)
         print("Inserted %s using value %s" %(path_metric, value))
 

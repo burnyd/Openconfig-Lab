@@ -13,6 +13,16 @@ CREATE USER dan WITH PASSWORD 'dan' WITH ALL PRIVILEGES
 GRANT ALL ON OC to dan
 
 
+from influxdb import InfluxDBClient
+
+influx = 'influx'
+client = InfluxDBClient(host=influx, port=8086, username='dan', password='dan', ssl=False, verify_ssl=False)
+client.switch_database('OC')
+
+result = client.query('select value from "OC-Data";')
+
+print("Result: {0}".format(result))
+
 from kafka import KafkaConsumer
 consumer = KafkaConsumer('sample','OC')
 for message in consumer:
