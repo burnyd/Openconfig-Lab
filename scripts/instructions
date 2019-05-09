@@ -1,7 +1,7 @@
 python gnmicli.py -n -m get -t ceos1 -x / -user admin -pass admin -p 6030
 python gNMI_Subscribe.py --server ceos1:6030 --username admin --password admin /interfaces
 python test_client.py --host 10.20.30.25 --port 6030 --username daniel --password daniel123 --subscribe "interfaces/interface[name=Ethernet1]/state/counters"
-
+python test_client.py --host 127.0.0.1 --port 6031 --username admin --password admin --subscribe "interfaces/interface[name=Ethernet1]/state/counters"
 
 https://www.influxdata.com/blog/getting-started-python-influxdb/
 

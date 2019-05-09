@@ -28,24 +28,20 @@ logging.basicConfig()
 logger = logging.getLogger('test-client')
 logger.setLevel(logging.DEBUG)
 
-#host_ip = "localhost"
-#host_port = 80050
-
+#influx configuration
 influx = 'influx'
 client = InfluxDBClient(host=influx, port=8086, username='dan', password='dan', ssl=False, verify_ssl=False)
 client.switch_database('OC')
 
-mode = "stream"
-nums = 0
-
-"""db_host = '127.0.0.1'
-db_port = 4242
-metrics = potsdb.Client(db_host, port=db_port)
-"""
-
+#Timestamp configuration
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%dT8:%H:%MZ')
 
+mode = "stream"
+nums = 0
+
+
+#Get the encoded path to add to list
 def encodePath(path):
     pathStrs = ""
     for pe in path:
@@ -57,35 +53,61 @@ def encodePath(path):
     return pathStrs[1:]
 
 
+#Function to add to influxDB
 def saveToInflux(response):
     for update in response.update.update:
         path_metric = encodePath(update.path.elem)
-        value = update.val.int_val
+        value = value_oc(update).replace("uint_val: ","")
+        #value = update.val.int_val
+        #value = update.val.int_val
         time_now = str(datetime.datetime.now())
         json_data = [
         {
         "measurement": "OC-Data",
         "tags": {
-            "host": "server",
-            "region": "NYC"
+            "OC-Path": ""+path_metric+"",
         },
         "time": ""+time_now+"",
         "fields": {
-            "value": path_metric
+            "value": int(value)
         }
     }
 ]
         client.write_points(json_data)
         print("Inserted %s using value %s" %(path_metric, value))
 
+def value_oc(path_value):
+     value_num = path_value.val
+     #value_num.replace("unit_val: ","")
+     return str(value_num)
+
+def testlogger(response):
+    for update in response.update.update:
+        path_metric = encodePath(update.path.elem)
+        #value = encodePath(update.val)
+        time_now = str(datetime.datetime.now())
+        #print(value)
+        #value = update.val.uint_val
+        value = value_oc(update).replace("uint_val: ","")
+        #print(type(update))
+        #print(type(path_metric))
+        #print(type(value))
+        #print(path_metric)
+        #print(type(value))
+        print(value)
 
 
+
+
+
+#Create the stub
 def get(stub, path_str, metadata):
     """Get and echo the response"""
     response = stub.Get(pyopenconfig.resources.make_get_request(path_str),
                         metadata=metadata)
     print(response)
 
+#Subscribe to the stub
 def subscribe(stub, path_str, mode, metadata):
     global nums
     """Subscribe and echo the stream"""
@@ -97,6 +119,7 @@ def subscribe(stub, path_str, mode, metadata):
             #logger.debug(response)
             #saveToTSDB(response)
             saveToInflux(response)
+            #testlogger(response)
             i += 1
             nums = i
     except grpc.framework.interfaces.face.face.AbortionError, error: # pylint: disable=catching-non-exception
