@@ -96,10 +96,6 @@ def testlogger(response):
         #print(type(value))
         print(value)
 
-
-
-
-
 #Create the stub
 def get(stub, path_str, metadata):
     """Get and echo the response"""

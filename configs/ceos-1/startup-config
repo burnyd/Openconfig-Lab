@@ -20,6 +20,10 @@ management api http-commands
    protocol unix-socket
    no shutdown
 !
+router bgp 1
+neighbor 12.12.12.2 remote-as 2
+redistribute connected
+!
 management api gnmi
 transport grpc default
 port 6030
@@ -31,4 +35,3 @@ ip access-list copp
 !
 control-plane
    ip access-group copp in
-

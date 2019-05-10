@@ -12,6 +12,9 @@ use OC
 CREATE USER dan WITH PASSWORD 'dan' WITH ALL PRIVILEGES
 GRANT ALL ON OC to dan
 
+DELETE * from "OC-Data"
+
+docker exec -it influx influx -execute 'CREATE DATABASE test'
 
 from influxdb import InfluxDBClient
 

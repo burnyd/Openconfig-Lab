@@ -28,11 +28,12 @@ _RE_PATH_COMPONENT = re.compile(r'''
 \])?$
 ''', re.VERBOSE)
 
-xpath = '/interfaces/interface[name=Ethernet1]/state/counters'
-user = 'daniel'
-password = 'daniel123'
-target = '10.20.30.25'
-port = '6030'
+#xpath = '/interfaces/interface[name=Ethernet1]/state/counters'
+xpath = '/network-instances/network-instance[name=default]/protocols/protocol[name=BGP][identifier=BGP]/'
+user = 'admin'
+password = 'admin'
+target = '127.0.0.1'
+port = '6031'
 mode = 'get'
 
 def _parse_path(p_names):
