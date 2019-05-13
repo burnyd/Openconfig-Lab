@@ -125,4 +125,4 @@ grpc:
   - Kafka:
     - Broker = single node
     - Multiple brokers = Cluster
-    - Messages are written by Producers in Topics 
+    - Messages are written by Producers in Topics
