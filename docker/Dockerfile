@@ -1,13 +1,22 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install wget python-pip python-dev git net-tools iputils-ping mtr -y
+#Create the Working directory where models and all will be /OC
+WORKDIR /OC
 
+#Copy contents from the Git repo into the /OC directory
+COPY . .
+
+#Install necessary packages
+RUN apt-get update && apt-get install wget python-pip python-dev git net-tools iputils-ping mtr vim -y
+
+#Install necessary Python packages
 RUN pip install grpcio futures grpcio-tools protobuf influxdb pyangbind
 
-ENV PYBINDPLUGIN = /usr/local/lib/python2.7/dist-packages/pyangbind/plugin
+ENV PYBINDPLUGIN /usr/local/lib/python2.7/dist-packages/pyangbind/plugin
+#Clone latest Git repos for models and add a symbolic link to models 
+RUN git clone https://github.com/openconfig/public.git && ln -s public/release/models/OC models
 
-RUN git clone https://github.com/openconfig/public.git && ln -s public/release/models models
-
+#Create the python to OC binding.py file which binds yang to Python models.
 RUN pyang --split-class-dir ocbind --plugindir /usr/local/lib/python2.7/dist-packages/pyangbind/plugin \
     -p models \
     -f pybind \
@@ -36,5 +45,5 @@ RUN pyang --split-class-dir ocbind --plugindir /usr/local/lib/python2.7/dist-pac
     models/bgp/openconfig-bgp.yang \
     models/network-instance/openconfig-network-instance.yang
 
-#using this to keep the container
+#using this to keep the container alive.
 CMD tail -f /dev/null
