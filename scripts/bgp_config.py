@@ -10,7 +10,7 @@ import ocbind
 from pyangbind.lib.serialise import pybindJSONDecoder
 ph = xpathhelper.YANGPathHelper()
 
-eos_bgp = {'ceos1': {'AS': '65001', 'PEER_AS': '65002', 'ROUTER_ID': '1.1.1.1', 'PEER': 12.12.12.2}, 'ceos2': {'AS': '65002', 'PEER_AS': '65001', 'ROUTER_ID': '2.2.2.2', 'PEER': 12.12.12.1}}
+eos_bgp = {'ceos1': {'AS': '65001', 'PEER_AS': '65002', 'ROUTER_ID': '1.1.1.1', 'PEER': '12.12.12.2'}, 'ceos2': {'AS': '65002', 'PEER_AS': '65001', 'ROUTER_ID': '2.2.2.2', 'PEER': '12.12.12.1'}}
 
 
 def main():
