@@ -8,7 +8,7 @@
 
 All Arista supported YANG models can be found in code [here](https://github.com/aristanetworks/yang)
 
-![Alt text](images/background1.jpg?raw=true "Pi")
+![Alt text](images/background1.jpg?raw=true "lab")
 
 This lab leveraging cEOS and Openconfig components (gnmi/grpc in eos, pyangbind, napalm_yang and streaming telemetry)
 
@@ -44,5 +44,17 @@ QoS DSCP:           none
 git clone https://github.com/burnyd/Openconfig-Lab/ && cd OpenConfig-Lab
 source startup.sh
 ```
+This may take some time with ceos-lab to boot up and start.  This should launch the entire lab and look like the following...
 
-This may take some time with ceos-lab to boot up and start.  This should launch the entire lab.
+![Alt text](images/dockerps.jpg?raw=true "dockerps")
+
+To go attach / exec into the mgt1 ubuntu container please issue the following.
+
+```console
+sh-3.2# docker exec -it mgt1 bash
+root@b6efac7b7b0f:/#
+root@b6efac7b7b0f:/# ping ceos1
+PING ceos1 (172.24.0.2) 56(84) bytes of data.
+64 bytes from ceos1.mgt (172.24.0.2): icmp_seq=1 ttl=64 time=0.151 ms
+```
+Everything should be pinagable via their docker name with docker networking on the management network.
