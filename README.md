@@ -8,6 +8,8 @@
 
 All Arista supported YANG models can be found in code [here](https://github.com/aristanetworks/yang)
 
+The other walkthroughs will be with the pyang, napalm-yang and gnmi readme's which can be found in this repo. 
+
 ![Alt text](images/background1.jpg?raw=true "lab")
 
 This lab leverages cEOS and Openconfig components (gnmi/grpc in eos, pyangbind, napalm_yang and streaming telemetry)
