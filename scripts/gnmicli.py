@@ -58,13 +58,6 @@ _RE_PATH_COMPONENT = re.compile(r'''
 \])?$
 ''', re.VERBOSE)
 
-xpath = '/interfaces/interface[name=Ethernet1]/state/counters'
-user = 'daniel'
-password = 'daniel123'
-target = '10.20.30.24'
-port = '6030'
-mode = 'get'
-
 
 class Error(Exception):
   """Module-level Exception class."""
@@ -365,26 +358,20 @@ def main():
   if args['debug']:
     os.environ['GRPC_TRACE'] = 'all'
     os.environ['GRPC_VERBOSITY'] = 'DEBUG'
-  #mode = args['mode']
-  #target = args['target']
-  #port = args['port']
+  mode = args['mode']
+  target = args['target']
+  port = args['port']
   notls = args['notls']
   get_cert = args['get_cert']
   root_cert = args['root_cert']
   cert_chain = args['cert_chain']
   json_value = args['value']
   private_key = args['private_key']
-  #xpath = args['xpath']
+  xpath = args['xpath']
   host_override = args['host_override']
-  #user = args['username']
-  #password = args['password']
+  user = args['username']
+  password = args['password']
   form = args['format']
-  xpath = '/interfaces/interface[name=Ethernet1]/state/counters'
-  user = 'daniel'
-  password = 'daniel123'
-  target = '10.20.30.24'
-  port = '6030'
-  mode = 'get'
   paths = _parse_path(_path_names(xpath))
   kwargs = {'root_cert': root_cert, 'cert_chain': cert_chain,
             'private_key': private_key}
