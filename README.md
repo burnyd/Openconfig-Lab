@@ -1,10 +1,13 @@
 
 
 # Requirements
-============
 
 * docker/Moby (tested in 17.09.0-ce)
 * Arista ceos-lab (tested in 4.21.4F)
+
+# Issues
+
+For any issue or general questions feel free to email me dhertzberg@arista.com 
 
 All Arista supported YANG models can be found in code [here](https://github.com/aristanetworks/yang)
 
