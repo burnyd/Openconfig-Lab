@@ -4,7 +4,7 @@ Pyangbind is simply a parser for all openconfig models.  Pyang will turn actual 
 
 Lets take a look at the bgp model.
 
-'''console
+```console
 sh-3.2# docker exec -it mgt1 bash
 pyang -f tree /models/bgp/*
 root@b6efac7b7b0f:/# cd /tmp/scripts/
@@ -18,11 +18,11 @@ module: openconfig-bgp
      |  |  +--ro as           oc-inet:as-number
      |  |  +--ro router-id?   oc-yang:dotted-quad
      |  +--rw default-route-distance
-'''
+```
 
 the bgp_example.py is a good way to reflect the model and how it interacts with the python code.
 
-'''console
+```console
 ocbgp = ocbind.openconfig_bgp(path_helper=ph)
 ocbgp.bgp.global_.config.as_ = 1
 ocbgp.bgp.global_.config.router_id = "1.1.1.1"
@@ -38,7 +38,7 @@ If either are changed to something that is not the same as the unit should be py
 
 Lets look at a more complicated example bgp_config.py which will take a python dictionary and turn it into code.  
 
-'''console
+```console
 root@b6efac7b7b0f:/tmp/scripts# python bgp_config.py
 {
     "bgp": {
@@ -82,6 +82,6 @@ root@b6efac7b7b0f:/tmp/scripts# python bgp_config.py
         }
     }
 }
-'''
+```
 
 Either way, the key point here is that pynag can parse through and add yang models to code.  The result would be importing any module into python code and then sending it directly to the device.
