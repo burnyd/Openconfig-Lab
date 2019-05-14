@@ -43,6 +43,6 @@ QoS DSCP:           none
 ```console
 git clone https://github.com/burnyd/Openconfig-Lab/ && cd OpenConfig-Lab
 source startup.sh
-```console
+```
 
 This may take some time with ceos-lab to boot up and start.  This should launch the entire lab.
