@@ -23,9 +23,26 @@ First please download the arista ceos code and follow the instructions before st
 `docs` This directory has random ramblings from me in YAML about Openconfig.  
 `images` Not really relevant but random screenshots for this repo.
 
+# Enabling gnmi interface on Arista devices
+It is extremely simply on eos to enable gnmi interface this is done on startup with ceos containers.
+```console
+!
+management api gnmi
+   transport grpc default
+!
+```
+Check to see if gnmi interface is running.
+```console
+ceos-1#show management api gnmi
+Enabled:            Yes
+Server:             running on port 6030, in default VRF
+SSL Profile:        none
+QoS DSCP:           none
+```
+# Instructions
+```console
+git clone https://github.com/burnyd/Openconfig-Lab/ && cd OpenConfig-Lab
+source startup.sh
+```console
 
-
-git clone https://github.com/burnyd/Openconfig-Lab/
-
-Edit the variable file in startup.sh with the correct ceosimage.  For example, my current image is ceosimage:4.21.4F
-which can be found by doing a docker image | grep ceos
+This may take some time with ceos-lab to boot up and start.  This should launch the entire lab.
