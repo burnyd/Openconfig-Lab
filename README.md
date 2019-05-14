@@ -59,3 +59,9 @@ PING ceos1 (172.24.0.2) 56(84) bytes of data.
 64 bytes from ceos1.mgt (172.24.0.2): icmp_seq=1 ttl=64 time=0.151 ms
 ```
 Everything should be pinagable via their docker name with docker networking on the management network.
+
+Once finished
+
+```console
+source teardown.sh
+```

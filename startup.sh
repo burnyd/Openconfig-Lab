@@ -30,7 +30,7 @@ docker network connect mgt mgt1
 docker network connect mgt ceos1
 docker network connect mgt ceos2
 docker network connect mgt influx
-docker network connect mgt1 zookeeper
+docker network connect mgt zookeeper
 docker network connect mgt kafka
 docker network connect mgt telegraf
 docker network connect mgt grafana
