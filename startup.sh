@@ -17,6 +17,7 @@ docker create --name=ceos2 --privileged -p 6032:6030 -e CEOS=1 -e container=dock
 docker create --name=mgt1 -it burnyd/ubuntu-oc:latest
 docker create --name=influx -it -p 8083:8083 -p 8086:8086 -p 8088:8088 -p 8089:8089 influxdb
 docker create --name=grafana -it -p 3000:3000 grafana/grafana
+docker create --name=zookeeper -it -p 2181 -e ZOOKEEPER_CLIENT_PORT=2181 confluentinc/cp-zookeeper
 docker create --name=kafka -it -p 9092:9092 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092 -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 confluentinc/cp-kafka
 docker create --name=telegraf -it -v $PWD/scripts/telegraf.conf:/etc/telegraf/telegraf.conf telegraf
 
@@ -29,9 +30,10 @@ docker network connect mgt mgt1
 docker network connect mgt ceos1
 docker network connect mgt ceos2
 docker network connect mgt influx
+docker network connect mgt1 zookeeper
 docker network connect mgt kafka
 docker network connect mgt telegraf
-
+docker network connect mgt grafana
 
 echo "starting ceos containers this may take a while"
 docker start ceos1
@@ -43,8 +45,10 @@ echo "Starting infrastructure containers"
 
 docker start mgt1
 docker start influx
+docker start zookeeper
 docker start kafka
 docker start telegraf
+docker start grafana
 
 echo "copying over configs"
 docker cp ./configs/ceos-1/startup-config ceos1:/mnt/flash/startup-config
