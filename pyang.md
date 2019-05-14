@@ -35,7 +35,6 @@ ocbgp.bgp.global_.config.as_ = 1 #This has to be a oc-inet which is a integer
 
 ocbgp.bgp.global_.config.router_id = "1.1.1.1" #This has to be a dotted-quad which is a ipv4 address
 
-```
 
 If either are changed to something that is not the same as the unit should be pyang will bomb and not work properly.  
 
