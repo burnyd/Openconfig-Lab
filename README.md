@@ -8,7 +8,7 @@
 
 All Arista supported YANG models can be found in code [here](https://github.com/aristanetworks/yang)
 
-The other walkthroughs will be with the pyang, napalm-yang and gnmi readme's which can be found in this repo. 
+The other walkthroughs will be with the pyang, napalm-yang and gnmi readme's which can be found in this repo.
 
 ![Alt text](images/background1.jpg?raw=true "lab")
 
@@ -21,9 +21,11 @@ First please download the arista ceos code and follow the instructions before st
 # Explanation
 
 `configs` This directory simply holds configs of the two ceos devices.
+
 `docker` This directory houses the Dockerfile for the mgt1 ubuntu container which can be found [here](https://cloud.docker.com/u/burnyd/repository/docker/burnyd/ubuntu-oc).
 
 `docs` This directory has random ramblings from me in YAML about Openconfig.  
+
 `images` Not really relevant but random screenshots for this repo.
 
 # Enabling gnmi interface on Arista devices
