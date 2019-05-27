@@ -1,0 +1,13 @@
+#octsdb -addr ceos1:5910 -config Terminattr.json -username admin -password admin -tsdb influx:4242 -text
+{
+        "subscriptions": [
+                "/Sysdb/interface/status/eth/phy/slice/1/intfStatus/Ethernet2"
+        ],
+        "metricPrefix": "eos",
+        	"metrics": {
+				"linkStatus": {
+                        "path": "/Sysdb/(interface)/status/eth/phy/slice/1/intfStatus/(Ethernet2)/linkStatus"
+                        }
+				}
+}
+

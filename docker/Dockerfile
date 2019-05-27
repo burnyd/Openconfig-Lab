@@ -4,7 +4,7 @@ FROM ubuntu:16.04
 COPY . /tmp
 
 #Install necessary packages
-RUN apt-get update && apt-get install wget python-pip python-dev git net-tools iputils-ping mtr vim -y
+RUN apt-get update && apt-get install wget python-pip python-dev git net-tools iputils-ping mtr vim curl -y
 
 #Install necessary Python packages
 RUN pip install grpcio futures grpcio-tools protobuf influxdb pyangbind napalm napalm_yang
@@ -44,6 +44,21 @@ RUN pyang --split-class-dir ocbind --plugindir /usr/local/lib/python2.7/dist-pac
 
 #Copy the binding file into the script file so we can import everything
 RUN cp -r ocbind/ /tmp/scripts/
+
+#Install Golang
+ENV GOVERSION 1.12.5
+RUN mkdir /goroot && mkdir /gopath
+RUN curl https://storage.googleapis.com/golang/go${GOVERSION}.linux-amd64.tar.gz \
+           | tar xvzf - -C /goroot --strip-components=1
+
+ENV GOPATH /gopath
+ENV GOROOT /goroot
+ENV PATH $GOROOT/bin:$GOPATH/bin:$PATH
+
+#Get the current OC tools GH directory and install the correct binary
+RUN git clone https://github.com/aristanetworks/goarista \
+    && go get github.com/aristanetworks/goarista/cmd/octsdb \
+    && go get github.com/aristanetworks/goarista/cmd/gnmi
 
 #using this to keep the container alive.
 CMD tail -f /dev/null

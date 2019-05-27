@@ -1,0 +1,12 @@
+#octsdb -addr ceos1:6030 -config OC.json -username admin -password admin -tsdb influx:4242 -text
+{
+	"subscriptions": [
+		"/interfaces"
+		],
+        "metricPrefix": "OpenConfig",
+        	"metrics": {
+				"counters": {
+                        	"path": "/interfaces"
+                        	}
+			}
+}

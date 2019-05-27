@@ -21,7 +21,6 @@ docker stop telegraf && docker rm telegraf
 echo "stopping and removing grafana"
 docker stop grafana && docker rm grafana
 
-
 echo "stopping and removing zookeeper"
 docker stop zookeeper && docker rm zookeeper
 

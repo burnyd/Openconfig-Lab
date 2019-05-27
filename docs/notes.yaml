@@ -126,3 +126,7 @@ grpc:
     - Broker = single node
     - Multiple brokers = Cluster
     - Messages are written by Producers in Topics
+
+links:
+  - https://github.com/influxdata/telegraf/tree/master/plugins/inputs/jti_openconfig_telemetry
+  - https://github.com/grahamneville/octsdb/blob/master/README.md

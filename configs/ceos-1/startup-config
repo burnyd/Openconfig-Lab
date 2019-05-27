@@ -6,6 +6,11 @@ no aaa root
 !
 username admin privilege 15 secret admin
 !
+!
+daemon TerminAttr
+   exec /usr/bin/TerminAttr -disableaaa -grpcaddr=172.23.0.2:5910 -allowed_ips=172.0.0.0/8
+   no shutdown
+!
 interface Ethernet1
    no switchport
    ip address 12.12.12.1/24
