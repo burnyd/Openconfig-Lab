@@ -38,5 +38,7 @@ no shutdown
 ip access-list copp
    10 permit ip any any
 !
+ip routing
+!
 control-plane
    ip access-group copp in
