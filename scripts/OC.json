@@ -1,4 +1,5 @@
-#octsdb -addr ceos1:6030 -config OC.json -username admin -password admin -tsdb influx:4242 -text
+#octsdb -addr ceos1:6030 -config OC.json -username admin -password admin -tsdb influx:4242
+#select * from "OpenConfig.counters"
 {
 	"subscriptions": [
 		"/interfaces"
